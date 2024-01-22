@@ -63,7 +63,7 @@
 &emsp;&emsp;[DEMO](https://www.bilibili.com/video/BV1s3411Z7ac/?vd_source=587567287ab7e8ab9d2dfbe660b36ddf) 
 
 ### 适用场景
-&emsp;&emsp;基于上述技术原理，本算法主要适用（但不限于）**原生具备CAD模型的弱纹理场景**，如工业领域。同时，鉴于其依赖边缘特征，物体的几何结构和边缘数量会对跟踪效果产生一定影响，因此在模型和参数选择上应遵循[建议参考](https://developer.vuforia.com/library/model-targets/model-targets-supported-objects-cad-model-best-practices)。
+&emsp;&emsp;基于上述技术原理，本算法主要适用（但不限于）**原生具备CAD模型的弱纹理场景**，如工业领域。同时，鉴于其依赖边缘特征，物体的几何结构和边缘数量会对跟踪效果产生一定影响，因此在模型和参数选择上应遵循一些建议参考：[VisionLib参考](https://docs.visionlib.com/v2.4.1/vl_unity_s_d_k__preparing_models.html) & [Vuforia参考](https://developer.vuforia.com/library/model-targets/model-targets-supported-objects-cad-model-best-practices)。
 
 ### 项目形式
 &emsp;&emsp;作者采用C++编写了算法内核。同时为了便于使用，又基于该内核开发了Unity插件，分为ARFoundation版和MRTK版。前者适用于iOS、Android等移动设备，后者适用于Microsoft Hololens 2。直接基于原生相机的视频流而不依赖ARFoundation也可以实现大部分功能，但ARFoundation可以带来两个益处：**1. 与SLAM融合，提高位姿稳定性和自恢复能力；2. 实时提供相机内参，无需要求用户预先标定相机（尤其在自动对焦功能可能引起内参变化时）**。考虑到ARFoundation对后续设备的支持覆盖越来越广，作者暂时选择基于该框架进行了插件开发。  
