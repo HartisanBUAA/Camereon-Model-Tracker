@@ -4,11 +4,44 @@
 <div align="center">
   <h1 align="center">Camereon Model Tracker</h1>
   <h3 align="center">Real-time 6-DOF pose tracking of rigid objects based on CAD models and monocular images</h3>
-  <h3 align="center">( <a href="#top">English</a> / <a href="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/README_CN.md">中文</a> )</h3>
+  <h3 align="center">( <a href="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/README.md">English</a> / <a href="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/README_CN.md">中文</a> )</h3>
 </div>
 <br/>
 
+<!--
 [TOC]
+-->
+- [Introduction](#introduction)
+  * [Theory](#theory)
+  * [Features](#features)
+  * [Demo](#demo)
+  * [Scenes](#scenes)
+  * [Implementation](#implementation)
+- [Preparation](#preparation)
+  * [Device Support](#device-support)
+  * [Software](#software)
+  * [Installation](#installation)
+  * [Model Preparation](#model-preparation)
+- [Usage](#usage)
+  * [ARFoundation Version](#arfoundation-version)
+    + [1. Import basic objects](#1-import-basic-objects)
+    + [2. Import Camereon package](#2-import-camereon-package)
+    + [3. Import Camereon objects](#3-import-camereon-objects)
+    + [4. Import CAD model](#4-import-cad-model)
+    + [5. Object settings](#5-object-settings)
+    + [6. Project settings](#6-project-settings)
+    + [7. Program interaction](#7-program-interaction)
+  * [MRTK Version](#mrtk-version)
+    + [1. Import basic objects](#1-import-basic-objects-1)
+    + [2. Import Camereon package](#2-import-camereon-package-1)
+    + [3. Import Camereon objects](#3-import-camereon-objects-1)
+    + [4. Import CAD model](#4-import-cad-model-1)
+    + [5. Object settings](#5-object-settings-1)
+    + [6. Project settings](#6-project-settings-1)
+    + [7. Program interaction](#7-program-interaction-1)
+  * [Public APIs](#public-apis)
+- [License](#license)
+- [Contact Information](#contact-information)
 <br/>
 
 

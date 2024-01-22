@@ -4,11 +4,44 @@
 <div align="center">
   <h1 align="center">Camereon Model Tracker</h1>
   <h3 align="center">基于三维模型与单目图像的刚体六自由度位姿实时跟踪算法</h3>
-  <h3 align="center">( <a href="url">English</a> / <a href="url">中文</a> )</h3>
+  <h3 align="center">( <a href="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/README.md">English</a> / <a href="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/README_CN.md">中文</a> )</h3>
 </div>
 <br/>
 
+<!--
 [TOC]
+-->
+- [项目简介](#项目简介)
+  * [理论背景](#理论背景)
+  * [主要特性](#主要特性)
+  * [演示视频](#演示视频)
+  * [适用场景](#适用场景)
+  * [项目形式](#项目形式)
+- [使用准备](#使用准备)
+  * [设备支持](#设备支持)
+  * [软件版本](#软件版本)
+  * [插件获取](#插件获取)
+  * [模型准备](#模型准备)
+- [使用方法](#使用方法)
+  * [ARFoundation版](#arfoundation版)
+    + [1. 导入基础对象](#1-导入基础对象)
+    + [2. 导入本项目包](#2-导入本项目包)
+    + [3. 导入本项目对象](#3-导入本项目对象)
+    + [4. 导入模型](#4-导入模型)
+    + [5. 对象设置](#5-对象设置)
+    + [6. 打包设置](#6-打包设置)
+    + [7. 程序交互](#7-程序交互)
+  * [MRTK版](#mrtk版)
+    + [1. 导入基础对象](#1-导入基础对象)
+    + [2. 导入本项目包](#2-导入本项目包)
+    + [3. 导入本项目对象](#3-导入本项目对象)
+    + [4. 导入模型](#4-导入模型)
+    + [5. 对象设置](#5-对象设置)
+    + [6. 打包设置](#6-打包设置)
+    + [7. 程序交互](#7-程序交互)
+  * [公共API](#公共api)
+- [许可证](#许可证)
+- [联系我们](#联系我们)
 <br/>
 
 
