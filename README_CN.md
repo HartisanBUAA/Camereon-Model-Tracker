@@ -1,4 +1,3 @@
-<style> h1 { border-bottom: none } </style>
 <a name="top"></a>
 
 <br/>
@@ -93,7 +92,7 @@
 </div>
  
 #### 4. 导入模型
-&emsp;&emsp;将目标物体的CAD模型拖入场景中，置于*CMR Camera*下作为其儿子节点，并通过*Transform*组件调整其相对于*CMR Camera*的初始位姿。该位姿将被用于初始化流程，用户应根据应用场景选择合适的初始视角。
+&emsp;&emsp;将目标物体的CAD模型拖入场景中，置于*CMR Camera*下作为其儿子节点，并通过*Transform*组件调整其相对于*CMR Camera*的初始位姿。该位姿将被用于初始化流程，用户应根据应用场景选择合适的初始视角。  
 &emsp;&emsp;添加最后一层*Layer*，命名为“CMR”，同时将*CMR Camera*和CAD模型所属的*Layer*都设置为“CMR”。此举是为了避免对模型进行后台处理时与主场景互相干扰。
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/add%20layer.png" width = "500" alt="add layer" />
@@ -154,7 +153,7 @@
 </div>
 
 #### 4. 导入模型
-&emsp;&emsp;将目标物体的CAD模型拖入场景中，置于*CMR Camera*下作为其儿子节点，并通过*Transform*组件调整其相对于*CMR Camera*的初始位姿。该位姿将被用于初始化流程，用户应根据应用场景选择合适的初始视角（相对于人眼，而非PV相机）。
+&emsp;&emsp;将目标物体的CAD模型拖入场景中，置于*CMR Camera*下作为其儿子节点，并通过*Transform*组件调整其相对于*CMR Camera*的初始位姿。该位姿将被用于初始化流程，用户应根据应用场景选择合适的初始视角（相对于人眼，而非PV相机）。  
 &emsp;&emsp;添加最后一层*Layer*，命名为“CMR”，同时将*CMR Camera*和CAD模型所属的*Layer*都设置为“CMR”。此举是为了避免对模型进行后台处理时与主场景互相干扰。
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/add%20layer.png" width = "500" alt="add layer" />
@@ -202,7 +201,7 @@
 
 
 ## 联系我们
-Hartisan@buaa.edu.cn
+Hartisan@buaa.edu.cn  
 项目链接: [Github](https://github.com/HartisanBUAA/Camereon-Model-Tracker)
 
 <p align="right">(<a href="#top">返回顶部</a>)</p>
