@@ -66,7 +66,7 @@
 &emsp;&emsp;Based on the above principle, this algorithm is mainly applicable to (but not limited to) texture-less scenes that natively have CAD models, such as the industrial field. Meanwhile, given its dependence on edge features, the geometric structure of the object and the number of edges will have a certain impact on the tracking effect, so the model and parameter selection should follow some [suggestions](https://developer.vuforia.com/library/model-targets/model-targets-supported-objects-cad-model-best-practices).
 
 ### Implementation
-&emsp;&emsp;The author implemented the algorithm kernel using C++. Meanwhile, in order to make it easier to use, the author has also developed a Unity plugin based on the kernel. There are two versions of this plugin:  ARFoundation version and MRTK version. The former is suitable for iOS/Android devices and the latter is suitable for Microsoft Hololens 2. Most features can also work based on the video stream from the native camera directly without relying on the ARFoundation, but ARFoundation can bring two benefits: 1. Fusion with SLAM can improve the stability of the pose and the ability of self-recovery; 2. ARFoundation provides camera intrinsics in real time without requiring the user to pre-calibrate the camera (especially those with Auto Focus). 
+&emsp;&emsp;The author implemented the algorithm kernel using C++. Meanwhile, in order to make it easier to use, the author has also developed a Unity plugin based on the kernel. There are two versions of this plugin:  ARFoundation version and MRTK version. The former is suitable for iOS/Android devices and the latter is suitable for Microsoft Hololens 2. Most features can also work based on the video stream from the native camera directly without relying on the ARFoundation, but ARFoundation can bring two benefits: 1. Fusion with SLAM can improve the stability of the pose and the ability of self-recovery; 2. ARFoundation provides camera intrinsics in real time without requiring the user to pre-calibrate the camera (especially those with Auto Focus).  
 &emsp;&emsp;The plugin is currently a lab prototype version and has not been fully tested, there may be adaptation bugs on some devices. During the trial period, the algorithm kernel runs for 5 minutes from the time the program starts, and stops automatically after the timeout.
 <br/>
 
@@ -107,7 +107,7 @@
 </div>
 
 #### 2. Import Camereon package
-&emsp;&emsp;Import *Camereon.ModelTracker.ARFoundation-vx.x.x.unitypackage*, there are three folders（*Plugins、Scripts、Shaders*）and one prefab (*CMRModelTracker*) in this package.
+&emsp;&emsp;Import *Camereon.ModelTracker.ARFoundation-vx.x.x.unitypackage*, there are three folders（*Plugins、Scripts、Shaders*）and one prefab (*CMRModelTracker*) in this package.  
 &emsp;&emsp;**NOTE**: There is a known bug in unity that the *Plugins* folder does not contain the iOS framework library when exporting the unitypackage. Therefore, iOS users need to download the *iOS framework* zip from the Release page, unzip it and put the *iOS* folder into the *Plugins* folder. This bug is being fixed.
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20package%20-%20arf.png" width = "350" alt="import package - arf" />
@@ -236,4 +236,4 @@ The current version only supports tracking a single object, if you need to switc
 Hartisan@buaa.edu.cn  
 [Github](https://github.com/HartisanBUAA/Camereon-Model-Tracker)
 
-<p align="right">(<a href="#top">返回顶部</a>)</p>
+<p align="right">(<a href="#top">Top</a>)</p>

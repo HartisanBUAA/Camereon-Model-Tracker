@@ -107,7 +107,7 @@
 </div>
 
 #### 2. 导入本项目包
-&emsp;&emsp;向Unity中导入*Camereon.ModelTracker.ARFoundation-vx.x.x.unitypackage*，该package包含3个文件夹（*Plugins、Scripts、Shaders*）以及1个预制体*CMRModelTracker*。
+&emsp;&emsp;向Unity中导入*Camereon.ModelTracker.ARFoundation-vx.x.x.unitypackage*，该package包含3个文件夹（*Plugins、Scripts、Shaders*）以及1个预制体*CMRModelTracker*。  
 &emsp;&emsp;**Tips**：由于Unity的bug，导出unitypackage时*Plugins*文件夹无法包含iOS平台的 framework库。所以iOS平台用户暂时需要单独从Release页下载*iOS framework*压缩包，解压后将*iOS*文件夹放入*Plugins*文件夹下即可。该bug正在被官方修复中。
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20package%20-%20arf.png" width = "350" alt="import package - arf" />
