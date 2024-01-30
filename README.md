@@ -93,6 +93,7 @@
 - Textures are not needed, the color doesn't matter either.
 - The model's local coordinate system should be **right-handed**，and Y-up is recommended.
 - The model's unit should be "meter".
+- The origin of the local coordinate system should preferably be located near the center of the model to facilitate the adjustment of the pose and also to improve the chances of successful self-recovery.
 <br/>
 
 
