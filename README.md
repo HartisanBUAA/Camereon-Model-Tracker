@@ -90,10 +90,10 @@
 
 ### Model Preparation
 - There are no special requirements for the format of the CAD model, as long as it can be imported into Unity and rendered properly.
-- Textures are not needed, the color doesn't matter either.
-- The model's local coordinate system should be **right-handed**，and Y-up is recommended.
+- If you want to utilize texture edges on the surface of the object, you need to provide a texture map that is consistent with the real object and ensure that it can be rendered correctly. Otherwise, there are no requirements for the model's texture and material.
+- The model's local coordinate system should be **right-handed**.
 - The model's unit should be "meter".
-- The origin of the local coordinate system should preferably be located near the center of the model to facilitate the adjustment of the pose and also to improve the chances of successful self-recovery.
+- The origin of the local coordinate system should preferably be located near the center of the model to facilitate the adjustment of the pose and also to increase the probability of successful self-recovery.
 <br/>
 
 
@@ -111,7 +111,7 @@
 &emsp;&emsp;Import *Camereon.ModelTracker.ARFoundation-vx.x.x.unitypackage*, there are three folders（*Plugins、Scripts、Shaders*）and one prefab (*CMRModelTracker*) in this package.  
 &emsp;&emsp;**NOTE**: There is a known bug in unity that the *Plugins* folder does not contain the iOS framework library when exporting the unitypackage. Therefore, iOS users need to download the *iOS framework* zip from the Release page, unzip it and put the *iOS* folder into the *Plugins* folder. This bug is being fixed.
 <div align="center">
-  <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20package%20-%20arf.png" width = "350" alt="import package - arf" />
+  <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20package%20-%20arf.png" width = "400" alt="import package - arf" />
 </div>
 
 #### 3. Import Camereon objects
@@ -143,6 +143,7 @@
 - ***Display Edges***. Display edges during the tracking (after initialization).
 - ***Use FPS60***. Use 60fps. Higher frame rates will increase power consumption and not all devices support 60 fps.
 - ***Initialization Only***. The tracking stops after successful initialization, and the subsequent poses are maintained by SLAM. Commonly used in static scenes.
+- ***Use Texture Edges***. Besides geometric edge features, edge features in the surface texture of the object are also used. It is required to provide a texture map that is consistent with the real object and ensure correct rendering.
 - ***Edge Magnitude Thresh***. Threshold for detecting edge features in an image, reflecting the difference in grayscale between the two sides of the edge. Too large a threshold may lead to incomplete edge detection, and too small a threshold may introduce noise interference. It needs to be adjusted according to the application scenario, and the default value is 20.
 - ***Initialization Quality Thresh***. Threshold for the initialization quality, reflecting how much edge features in the image are aligned with the target object. In some cases, the edge features in the image do not completely match the target object, for example, the object is partially occluded, the CAD model is inaccurate, etc. A threshold that is too large may cause initialization difficulties, and a threshold that is too small may result in tracking the wrong object. It needs to be adjusted according to the application scenario, and the default value is 0.65.
 - ***Control Points Max Number***. The maximun number of control points. The algorithm will sample points, which are called control points, at a certain step on the edges. Increasing the number of control points can improve the robustness of the algorithm, but the computation effort will also increase. Reducing the number of control points will do the opposite. The default value is 2500.
@@ -155,6 +156,10 @@
 - Set "Target Architectures" to "ARM64"
 - For iOS, enable "Requires ARKit Support"
 - Confirm "Apple ARKit" or "Google ARCore" is checked in "XR Plug-in Management"
+- In "Graphics - Always Included Shaders", add four shaders in the package according to the type of render pipeline used by the project
+<div align="center">
+  <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/add%20shaders.png" width = "800" alt="add shaders" />
+</div>
 
 #### 7. Program interaction
 &emsp;&emsp;When the program starts running on the device, the camera is automatically turned on by ARFoundation and the video stream is displayed on the screen. When the Camereon tracker starts running (through API or "*Auto Start*" is checked in the script), the edge features of the target with the initial pose, which was set in "4. Import CAD model", will display on the screen. The user just need to move the device so that the edges are roughly aligned with the target object in the image, then the initialization will be completed and tracking begins. Successful initialization is manifested by the red edges disappearing or turning green, depending on whether "*Display Edges*" is checked in the script settings.
@@ -174,7 +179,7 @@
 #### 2. Import Camereon package
 &emsp;&emsp;Import *Camereon.ModelTracker.MRTK2-vx.x.x.unitypackage*, there are three folders（*Plugins、Scripts、Shaders*）and one prefab (*CMRModelTracker*) in this package.
 <div align="center">
-  <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20package%20-%20mrtk.png" width = "350" alt="import package - mrtk" />
+  <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20package%20-%20mrtk.png" width = "400" alt="import package - mrtk" />
 </div>
 
 #### 3. Import Camereon objects
@@ -202,6 +207,7 @@
 - ***Auto Start***. Start initializing and tracking automatically after program startup.
 - ***Display Model***. Display CAD model during the tracking (after initialization). 
 - ***Initialization Only***. The tracking stops after successful initialization, and the subsequent poses are maintained by Hololens. Commonly used in static scenes. **Tips:** Since the API for obtaining camera images in MRTK is executed asynchronously and the frame rate is very low, resulting in huge delays in real-time tracking mode, it is recommended to apply the tracker to static scenes and check this option.
+- ***Use Texture Edges***. Besides geometric edge features, edge features in the surface texture of the object are also used. It is required to provide a texture map that is consistent with the real object and ensure correct rendering.
 - ***Edge Magnitude Thresh***. Threshold for detecting edge features in an image, reflecting the difference in grayscale between the two sides of the edge. Too large a threshold may lead to incomplete edge detection, and too small a threshold may introduce noise interference. It needs to be adjusted according to the application scenario, and the default value is 20.
 - ***Initialization Quality Thresh***. Threshold for the initialization quality, reflecting how much edge features in the image are aligned with the target object. In some cases, the edge features in the image do not completely match the target object, for example, the object is partially occluded, the CAD model is inaccurate, etc. A threshold that is too large may cause initialization difficulties, and a threshold that is too small may result in tracking the wrong object. It needs to be adjusted according to the application scenario, and the default value is 0.65.
 - ***Control Points Max Number***. The maximun number of control points. The algorithm will sample points, which are called control points, at a certain step on the edges. Increasing the number of control points can improve the robustness of the algorithm, but the calculation effort will also increase. Reducing the number of control points will do the opposite. The default value is 2500.
@@ -211,6 +217,10 @@
 - Enable "Allow ‘unsafe’ Code"
 - Set "Architecture" to "ARM 64-bit"
 - Confirm "Open XR" and "Microsoft Hololens feature group" are checked in "XR Plug-in Management"
+- In "Graphics - Always Included Shaders", add four shaders in the package according to the type of render pipeline used by the project
+<div align="center">
+  <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/add%20shaders.png" width = "800" alt="add shaders" />
+</div>
 
 #### 7. Program interaction
 &emsp;&emsp;When the Camereon tracker starts running (through API or "*Auto Start*" is checked in the script), the CAD model of the target with initial pose, which was set in "4. Import CAD model", will display in front of the user's eyes. The user just need to move his head so that the model is roughly aligned with the real target object, then the initialization will be completed (with some delays) and tracking begins. Successful initialization is manifested by the red model disappearing or turning green, depending on whether "*Display Model*" is checked in the script settings.

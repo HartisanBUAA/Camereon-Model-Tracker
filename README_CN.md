@@ -90,8 +90,8 @@
 
 ### 模型准备
 - 对CAD模型的格式没有特殊要求，能导入Unity正常渲染即可
-- 模型不需要纹理，对颜色也没有要求
-- 要求创建模型时局部坐标系为**右手系**，推荐Y轴向上
+- 如果需要利用物体表面的纹理边缘，则需要提供与实物一致的纹理贴图并确保可以正确渲染；反之，则对模型的纹理和材质没有要求
+- 要求创建模型时局部坐标系为**右手系**
 - 要求创建模型时使用“**米**”作为单位，才能得到真实位姿。例如实际物体的长度为10厘米，则其模型的长度数值应为0.1
 - 局部坐标系的原点最好位于模型中心附近，方便调整位姿，同时也可以提高自恢复的成功率
 <br/>
@@ -111,7 +111,7 @@
 &emsp;&emsp;向Unity中导入*Camereon.ModelTracker.ARFoundation-vx.x.x.unitypackage*，该package包含3个文件夹（*Plugins、Scripts、Shaders*）以及1个预制体*CMRModelTracker*。  
 &emsp;&emsp;**Tips**：由于Unity的bug，导出unitypackage时*Plugins*文件夹无法包含iOS平台的 framework库。所以iOS平台用户暂时需要单独从Release页下载*iOS framework*压缩包，解压后将*iOS*文件夹放入*Plugins*文件夹下即可。该bug正在被官方修复中。
 <div align="center">
-  <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20package%20-%20arf.png" width = "350" alt="import package - arf" />
+  <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20package%20-%20arf.png" width = "400" alt="import package - arf" />
 </div>
 
 #### 3. 导入本项目对象
@@ -143,6 +143,7 @@
 - ***Display Edges***. 初始化成功后，跟踪过程中是否继续显示边缘特征
 - ***Use FPS60***. 是否启用60帧率。高帧率可以获得更流畅的体验，但也会增加功耗，并且不是所有设备都支持60帧率
 - ***Initialization Only***. 只执行初始化流程，初始化成功后即停止跟踪，后续位姿依靠SLAM维护。常用于静态场景
+- ***Use Texture Edges***. 除了几何边缘特征，还使用物体表面纹理中的边缘特征，需要提供与实物一致的纹理贴图并确保正确渲染
 - ***Edge Magnitude Thresh***. 在图像中检测边缘特征时的阈值，用来表示边缘两侧的灰度差值。阈值过大可能导致边缘漏检，阈值过小可能引入噪声干扰，需根据实际应用场景进行调整，默认值为20
 - ***Initialization Quality Thresh***. 初始化质量阈值，反映了图像中边缘特征与目标物体的吻合程度。在某些情况下，图像中的边缘特征与目标物体并没有完全吻合，例如物体被局部遮挡、CAD模型不准确等。阈值过大可能导致初始化困难，阈值过小可能导致跟踪到错误的物体，需根据实际应用场景进行调整，默认值为0.65
 - ***Control Points Max Number***. 控制点最大数量。算法会在边缘上按照一定步长采样单点（被称为控制点）进行匹配。增加控制点可提高算法鲁棒性，但计算量也会增加，减少控制点反之，默认值为2500
@@ -156,6 +157,10 @@
 - “Target Architectures”选择“ARM64”
 - iOS平台勾选“Requires ARKit Support”
 - 在“XR Plug-in Management”中确认勾选了“Apple ARKit”或“Google ARCore”
+- 在“Graphics - Always Included Shaders”将包中的4个shader添加进来（根据项目使用的管线类型选择），如下图所示
+<div align="center">
+  <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/add%20shaders.png" width = "800" alt="add shaders" />
+</div>
 
 #### 7. 程序交互
 &emsp;&emsp;程序在设备上开始运行时，摄像头被ARFoundation自动开启并将视频流显示到屏幕上。当本项目算法开始工作时（通过API控制或者在上文脚本设置中勾选了“*Auto Start*”），目标物体在初始位姿下（在“4.导入模型”中设置的）的边缘特征会自动显示在屏幕上，用户移动设备使得边缘与图像中的目标物体大致对齐，即可完成初始化流程进入跟踪阶段。初始化成功具体表现为红色边缘消失或变为绿色，这取决于是否在脚本设置中勾选了“*Display Edges*”。
@@ -175,7 +180,7 @@
 #### 2. 导入本项目包
 &emsp;&emsp;向Unity中导入*Camereon.ModelTracker.MRTK2-vx.x.x.unitypackage*,该package包含3个文件夹（*Plugins、Scripts、Shaders*）以及1个预制体*CMRModelTracker*。
 <div align="center">
-  <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20package%20-%20mrtk.png" width = "350" alt="import package - mrtk" />
+  <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20package%20-%20mrtk.png" width = "400" alt="import package - mrtk" />
 </div>
 
 #### 3. 导入本项目对象
@@ -203,6 +208,7 @@
 - ***Auto Start***. 程序启动后自动进入跟踪状态，开始初始化流程
 - ***Display Model***. 初始化成功后，跟踪过程中是否继续显示CAD模型
 - ***Initialization Only***. 只执行初始化流程，初始化成功后即停止跟踪，后续位姿依靠Hololens维护。常用于静态场景或只需要解算单帧位姿的场景。**Tips：由于MRTK中获取相机图像的API为异步执行且帧率很低，导致实时跟踪模式下延迟极大，所以建议应用于静态场景并勾选该选项**
+- ***Use Texture Edges***. 除了几何边缘特征，还使用物体表面纹理中的边缘特征，需要提供与实物一致的纹理贴图并确保正确渲染
 - ***Edge Magnitude Thresh***. 在图像中检测边缘特征时的阈值，用来表示边缘两侧的灰度差值。阈值过大可能导致边缘漏检，阈值过小可能引入噪声干扰，需根据实际应用场景进行调整，默认值为20
 - ***Initialization Quality Thresh***. 初始化质量阈值，反映了图像中边缘特征与目标物体的吻合程度。在某些情况下，图像中的边缘特征与目标物体并没有完全吻合，例如物体被局部遮挡、CAD模型不准确等。阈值过大可能导致初始化困难，阈值过小可能导致跟踪到错误的物体，需根据实际应用场景进行调整，默认值为0.65
 - ***Control Points Max Number***. 控制点最大数量。算法会在边缘上按照一定步长采样单点（被称为控制点）进行匹配。增加控制点可提高算法鲁棒性，但计算量也会增加，减少控制点反之，默认值为2500
@@ -213,6 +219,10 @@
 - 需勾选“Allow ‘unsafe’ Code”
 - “Architecture”选择“ARM 64-bit”
 - 在“XR Plug-in Management”中确认勾选了“Open XR”以及“Microsoft Hololens feature group”
+- 在“Graphics - Always Included Shaders”将包中的4个shader添加进来（根据项目使用的管线类型选择），如下图所示
+<div align="center">
+  <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/add%20shaders.png" width = "800" alt="add shaders" />
+</div>
 
 #### 7. 程序交互
 &emsp;&emsp;程序在设备上启动后，当本项目算法开始工作时（通过API控制或者在上文脚本设置中勾选了“*Auto Start*”），目标物体的CAD模型将在初始位姿下（在“4.导入模型”中设置的）显示在用户眼前，用户移动头部使得模型与现实中的目标物体大致对齐，即可完成初始化流程（有少许延迟）。初始化成功具体表现为CAD模型消失或变为绿色，这取决于是否在脚本设置中勾选了“*Display Model*”。
