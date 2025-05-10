@@ -48,22 +48,24 @@
 ## Introduction
 
 ### Theory
-&emsp;&emsp;This algorithm is used to calculate the 6-DOF pose, including translation and rotation, of a 3D object relative to a monocular camera in real time, which can be used in the fields of augmented reality, robotic grasping, and target tracking etc.. It is similar with [VisionLib](https://visionlib.com/) and [Vuforia Model Target](https://developer.vuforia.com/library/objects/model-targets). The algorithm uses the CAD model of the target object to extract 3D edge features, and extracts 2D edge features in the RGB image acquired by the monocular camera, and then establish the correspondence between the 3D features and 2D features, so as to solve the object's pose.
+&emsp;&emsp;This algorithm is used to calculate the 6-DOF pose, including translation and rotation, of a 3D object relative to a monocular camera in real time, which can be used in the fields of augmented reality, robotic grasping, and target tracking etc.. It is similar with [VisionLib SDK](https://visionlib.com/) of Visometry Company and [Vuforia SDK - Model Target](https://developer.vuforia.com/library/objects/model-targets) of PTC Company.
 
 ### Features
-- Only CAD models and monocular images are used, without Al pre-training. 
+- Only CAD models and monocular color images are used. 
 - Stable and fast 6DOF pose tracking @60FPS. 
 - Automatic features detection and update during tracking process. 
 - Improved robustness against cluttered background, partial occlusion, and fast motion. 
-- Certain automatic re-initialization ability after tracking failure. 
+- Certain self-recovery capabilities after tracking failure. 
 - Enhanced robustness with the integration of SLAM. 
+- Supports offline AI pre-training on CAD models, enabling automatic initialization from arbitrary viewpoints and significantly enhancing self-recovery capabilities.
 - Cross-platform supported.
 
 ### Demo
-&emsp;&emsp;[Video](https://www.bilibili.com/video/BV1s3411Z7ac/?vd_source=587567287ab7e8ab9d2dfbe660b36ddf) 
+&emsp;&emsp;[VIDEO : Without AI pre-training](https://www.bilibili.com/video/BV1s3411Z7ac/?vd_source=587567287ab7e8ab9d2dfbe660b36ddf) 
+&emsp;&emsp;[VIDEO : With AI pre-training](https://www.bilibili.com/video/BV1sSVozpEXF/?vd_source=587567287ab7e8ab9d2dfbe660b36ddf) 
 
 ### Scenes
-&emsp;&emsp;Based on the above principle, this algorithm is mainly applicable to (but not limited to) texture-less scenes that natively have CAD models, such as the industrial field. Meanwhile, given its dependence on edge features, the geometric structure of the object and the number of edges will have a certain impact on the tracking effect, so the model and parameter selection should follow [suggestions from VisionLib](https://docs.visionlib.com/v2.4.1/vl_unity_s_d_k__preparing_models.html) or [suggestions from Vuforia](https://developer.vuforia.com/library/model-targets/model-targets-supported-objects-cad-model-best-practices).
+&emsp;&emsp;This algorithm is mainly applicable to (but not limited to) texture-less scenes that natively have CAD models, such as the industrial field. Meanwhile, given its dependence on edge features, the geometric structure of the object and the number of edges will have a certain impact on the tracking effect, so the model and parameter selection should follow [suggestions from VisionLib](https://docs.visionlib.com/v2.4.1/vl_unity_s_d_k__preparing_models.html) or [suggestions from Vuforia](https://developer.vuforia.com/library/model-targets/model-targets-supported-objects-cad-model-best-practices).
 
 ### Implementation
 &emsp;&emsp;The author implemented the algorithm kernel using C++. Meanwhile, in order to make it easier to use, the author has also developed a Unity plugin based on the kernel. There are two versions of this plugin:  ARFoundation version and MRTK version. The former is suitable for iOS/Android devices and the latter is suitable for Microsoft Hololens 2. Most features can also work based on the video stream from the native camera directly without relying on the ARFoundation, but ARFoundation can bring two benefits: 1. Fusion with SLAM can improve the stability of the pose and the ability of self-recovery; 2. ARFoundation provides camera intrinsics in real time without requiring the user to pre-calibrate the camera (especially those with Auto Focus).  
@@ -77,6 +79,7 @@
 - For iOS devices, most of them in recent years with ARKit are supported.
 - For Android devices, ARCore support is required, please see the official [device support list](https://developers.google.cn/ar/devices?hl=zh-cn). For those devices that are not on the list, there are some [tricks](https://www.getdroidtips.com/enable-arcore-android-smartphones/) to support ARCore.
 - For Microsoft Hololens, only the second generation is supported.
+- For devices on other platforms such as Windows, Linux, and MacOS, custom adaptation based on the underlying core is required. Please contact us.
 
 ### Software
 - ARFoundation 5.1.0
@@ -94,6 +97,7 @@
 - The model's local coordinate system should be **right-handed**.
 - The model's unit should be "meter".
 - The origin of the local coordinate system should preferably be located near the center of the model to facilitate the adjustment of the pose and also to increase the probability of successful self-recovery.
+- **The automated AI training tool is currently under development. For CAD models pre-training requirements, please contact us.**
 <br/>
 
 
@@ -118,22 +122,26 @@
 &emsp;&emsp;Add the prefab *CMRModelTracker* to the scene, the prefab contains：
 - ***CMR Camera***. This camera is not involved in the display and is only used by the algorithm for background processing of CAD models.
 - ***Canvas***
-	- ***Edge Image***. An image that is used to display edges, which is necessary for initialization process.
+	- ***Edge Image***. An image that is used to display edges.
 	- ***Resume Button***. A button that is used to resume the tracking when the tracking fails or the wrong target is tracked. This button is not required, you can design your own trigger logic using the scripting API below.
-- ***Target Anchor***. An empty object to maintain the pose. When the target object's pose relative to the camera is successfully solved, the pose is further converted to the object's pose in the SLAM coordinate system (*XR Origin*) and updated to this *Target Anchor* object (which will be automatically moved under *XR Origin* as its son node). In this way, SLAM can continue to maintain the object's pose in case of tracking failures in static scenes. And in practice, the user only needs to create virtual content based on this object.
+- ***Target Anchor***. An empty object to maintain the pose. When the target object's pose relative to the camera is successfully solved, the pose is further converted to the object's pose in the SLAM coordinate system (*XR Origin*) and updated to this *Target Anchor* object (which will be automatically moved under *XR Origin* as its son node). And in practice, the user only needs to create virtual content based on this object.
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20tracker%20-%20arf.png" width = "300" alt="import tracker - arf" />
 </div>
  
 #### 4. Import CAD model
-&emsp;&emsp;Add the target's model to the scene, place it under *CMR Camera* as a son node, and adjust it's initial pose relative to the *CMR Camera* through the *Transform* component. This pose will be used in the initialization process, and the user should choose the appropriate pose based on the application scenario.  
-&emsp;&emsp;Add the last *Layer* and name it "CMR", and set the *Layer* of both the *CMR Camera* and the model to "CMR". This is to avoid interfering with the main scene when performing background processing on the model.
+&emsp;&emsp;Add the target's model to the scene, place it under *CMR Camera* as a son node. If the model hasn't been pre-trained, you need to adjust it's initial pose relative to the *CMR Camera* through the *Transform* component. This pose will be used for manually initialization, and the user should choose the appropriate pose based on the application scenario. If the model has already been pre-trained, it is not necessary to set the initial pose.
+&emsp;&emsp;Add the last *Layer* and name it "CMR" in the inspector, and set the *Layer* of both the *CMR Camera* and the model to "CMR". This is to avoid interfering with the main scene when performing background processing on the model.
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/add%20layer.png" width = "500" alt="add layer" />
 </div>
 
-#### 5. Object settings
+#### 5. Import pre-training data (Optional)
+&emsp;&emsp;If the model has been pre-trained, import the pre-training data (.dat files) to the folder *Assets-StreamingAssets* (create if not exist). 
+
+#### 6. Object settings
 &emsp;&emsp;The prefab *CMRModelTracker* should load the script *CMRModelTrackerManager*, which is under the *Scripts* folder. Connect the objects in the scene to the variables in the script  as shown in the figure, where *VLCar* is the CAD model as an example.
+&emsp;&emsp;If the pre-trained data has been imported and AI-enhanced mode needs to be activated, enter the dat filename (excluding extension) in the *Training Data Name* field.
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/cmr%20settings%20-%20arf.png" width = "700" alt="cmr settings - arf" />
 </div>
@@ -144,12 +152,13 @@
 - ***Use FPS60***. Use 60fps. Higher frame rates will increase power consumption and not all devices support 60 fps.
 - ***Initialization Only***. The tracking stops after successful initialization, and the subsequent poses are maintained by SLAM. Commonly used in static scenes.
 - ***Use Texture Edges***. Besides geometric edge features, edge features in the surface texture of the object are also used. It is required to provide a texture map that is consistent with the real object and ensure correct rendering.
-- ***Edge Magnitude Thresh***. Threshold for detecting edge features in an image, reflecting the difference in grayscale between the two sides of the edge. Too large a threshold may lead to incomplete edge detection, and too small a threshold may introduce noise interference. It needs to be adjusted according to the application scenario, and the default value is 20.
+- ***Use CPU For AI Inference***. Use CPU for inference in the AI-enhanced mode; otherwise, different acceleration frameworks will be automatically selected for inference based on the platform. Specifically, Windows uses DirectML, iOS uses CoreML, and Android uses NNAPI. **It is important to note that due to the varying optimization characteristics of different devices and platforms, the combination of acceleration frameworks and quantized AI models does not always yield the fastest inference. Users may need to experiment with different combinations.** For example, the combination of CoreML and FP32 is the fastest on iOS devices, while the combination of CPU and INT8 may be the fastest on some Android devices.
+- ***Edge Magnitude Thresh***. Threshold for detecting edge features in an image, reflecting the difference in grayscale between the two sides of the edge. Too large a threshold may lead to incomplete edge detection, and too small a threshold may introduce noise interference. It needs to be adjusted according to the application scenario, and the default value is 15.
 - ***Initialization Quality Thresh***. Threshold for the initialization quality, reflecting how much edge features in the image are aligned with the target object. In some cases, the edge features in the image do not completely match the target object, for example, the object is partially occluded, the CAD model is inaccurate, etc. A threshold that is too large may cause initialization difficulties, and a threshold that is too small may result in tracking the wrong object. It needs to be adjusted according to the application scenario, and the default value is 0.65.
 - ***Control Points Max Number***. The maximun number of control points. The algorithm will sample points, which are called control points, at a certain step on the edges. Increasing the number of control points can improve the robustness of the algorithm, but the computation effort will also increase. Reducing the number of control points will do the opposite. The default value is 2500.
 - ***Pose Smooth Factor***. The factor to smooth the pose. To reduce jitter, the algorithm can smooth the output pose. A value of 0 means no smoothing is performed. The larger the value, the smoother the pose, but also the greater the delay. The default value is 0.5.
 
-#### 6. Project settings
+#### 7. Project settings
 - Enable "Allow ‘unsafe’ Code"
 - Set "Scripting Backend" to "IL2CPP"
 - For Android, set "Graphics API" to "OpenGLES3", not "Vulkan"
@@ -161,8 +170,12 @@
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/add%20shaders.png" width = "800" alt="add shaders" />
 </div>
 
-#### 7. Program interaction
-&emsp;&emsp;When the program starts running on the device, the camera is automatically turned on by ARFoundation and the video stream is displayed on the screen. When the Camereon tracker starts running (through API or "*Auto Start*" is checked in the script), the edge features of the target with the initial pose, which was set in "4. Import CAD model", will display on the screen. The user just need to move the device so that the edges are roughly aligned with the target object in the image, then the initialization will be completed and tracking begins. Successful initialization is manifested by the red edges disappearing or turning green, depending on whether "*Display Edges*" is checked in the script settings.
+#### 8. Program interaction
+&emsp;&emsp;When the program starts running on the device, the camera is automatically turned on by ARFoundation and the video stream is displayed on the screen. When the Camereon tracker starts running (through API or "*Auto Start*" is checked in the script), 
+- **For Non-AI mode** : the edge features of the target with the initial pose, which was setup in "4. Import CAD model", will display on the screen. The user just need to move the device so that the edges are roughly aligned with the target object in the image, then the initialization will be completed and tracking begins. 
+- **For AI mode** : Manual initial pose setup is no longer required — AI will automatically detect objects and completes initialization from arbitrary viewpoints.
+
+&emsp;&emsp;Successful initialization is manifested by the red edges disappearing or turning green, depending on whether "*Display Edges*" is checked in the script settings.
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/interaction%20-%20arf.png" width = "700" alt="interaction - arf" />
 </div>
@@ -185,20 +198,24 @@
 #### 3. Import Camereon objects
 &emsp;&emsp;Add the prefab *CMRModelTracker* to the scene, the prefab contains：
 - ***CMR Camera***. This camera is not involved in the display and is only used by the algorithm for background processing of CAD models.
-- ***Target Anchor***. An empty object to maintain the pose. When the target object's pose relative to the camera is successfully solved, the pose is further converted to the object's pose in the world coordinate system and updated to this *Target Anchor* object (which will be automatically moved under scene root as its son node). In this way, Hololens can continue to maintain the object's pose in case of tracking failures in static scenes. And in practice, the user only needs to create content based on this object.
+- ***Target Anchor***. An empty object to maintain the pose. When the target object's pose relative to the camera is successfully solved, the pose is further converted to the object's pose in the world coordinate system and updated to this *Target Anchor* object (which will be automatically moved under scene root as its son node). And in practice, the user only needs to create content based on this object.
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20tracker%20-%20mrtk.png" width = "300" alt="import tracker - mrtk" />
 </div>
 
 #### 4. Import CAD model
-&emsp;&emsp;Add the target's model to the scene, place it under *CMR Camera* as a son node, and adjust it's initial pose relative to the *CMR Camera* through the *Transform* component. This pose will be used in the initialization process, and the user should choose the appropriate pose (relative to eyes, not the PV camera) based on the application scenario.  
-&emsp;&emsp;Add the last *Layer* and name it "CMR", and set the *Layer* of both the *CMR Camera* and the model to "CMR". This is to avoid interfering with the main scene when performing background processing on the model.
+&emsp;&emsp;Add the target's model to the scene, place it under *CMR Camera* as a son node. If the model hasn't been pre-trained, you need to adjust it's initial pose relative to the *CMR Camera* through the *Transform* component. This pose will be used for manually initialization, and the user should choose the appropriate pose (relative to eyes, not the PV camera) based on the application scenario. If the model has already been pre-trained, it is not necessary to set the initial pose.
+&emsp;&emsp;Add the last *Layer* and name it "CMR" in the inspector, and set the *Layer* of both the *CMR Camera* and the model to "CMR". This is to avoid interfering with the main scene when performing background processing on the model.
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/add%20layer.png" width = "500" alt="add layer" />
 </div>
 
-#### 5. Object settings
+#### 5. Import pre-training data (Optional)
+&emsp;&emsp;If the model has been pre-trained, import the pre-training data (.dat files) to the folder *Assets-StreamingAssets* (create if not exist). 
+
+#### 6. Object settings
 &emsp;&emsp;The prefab *CMRModelTracker* should load the script *CMRModelTrackerManager*, which is under the *Scripts* folder. Connect the objects in the scene to the variables in the script  as shown in the figure, where *VLCar* is the CAD model as an example.
+&emsp;&emsp;If the pre-trained data has been imported and AI-enhanced mode needs to be activated, enter the dat filename (excluding extension) in the *Training Data Name* field.
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/cmr%20settings%20-%20mrtk.png" width = "700" alt="cmr settings - mrtk" />
 </div>
@@ -206,14 +223,15 @@
 &emsp;&emsp;The script *CMRModelTrackerManager* provides several setup options：
 - ***Auto Start***. Start initializing and tracking automatically after program startup.
 - ***Display Model***. Display CAD model during the tracking (after initialization). 
-- ***Initialization Only***. The tracking stops after successful initialization, and the subsequent poses are maintained by Hololens. Commonly used in static scenes. **Tips:** Since the API for obtaining camera images in MRTK is executed asynchronously and the frame rate is very low, resulting in huge delays in real-time tracking mode, it is recommended to apply the tracker to static scenes and check this option.
+- ***Initialization Only***. The tracking stops after successful initialization, and the subsequent poses are maintained by Hololens. Commonly used in static scenes.
 - ***Use Texture Edges***. Besides geometric edge features, edge features in the surface texture of the object are also used. It is required to provide a texture map that is consistent with the real object and ensure correct rendering.
-- ***Edge Magnitude Thresh***. Threshold for detecting edge features in an image, reflecting the difference in grayscale between the two sides of the edge. Too large a threshold may lead to incomplete edge detection, and too small a threshold may introduce noise interference. It needs to be adjusted according to the application scenario, and the default value is 20.
+- ***Use CPU For AI Inference***. Use CPU for inference in the AI-enhanced mode, otherwise DirectML will be used. **It is important to note that due to the varying optimization characteristics of different devices and platforms, the combination of acceleration frameworks and quantized AI models does not always yield the fastest inference. Users may need to experiment with different combinations.** On HoloLens 2, using CPU inference may be faster, and using DirectML may even cause the GPU to be suspended.
+- ***Edge Magnitude Thresh***. Threshold for detecting edge features in an image, reflecting the difference in grayscale between the two sides of the edge. Too large a threshold may lead to incomplete edge detection, and too small a threshold may introduce noise interference. It needs to be adjusted according to the application scenario, and the default value is 15.
 - ***Initialization Quality Thresh***. Threshold for the initialization quality, reflecting how much edge features in the image are aligned with the target object. In some cases, the edge features in the image do not completely match the target object, for example, the object is partially occluded, the CAD model is inaccurate, etc. A threshold that is too large may cause initialization difficulties, and a threshold that is too small may result in tracking the wrong object. It needs to be adjusted according to the application scenario, and the default value is 0.65.
 - ***Control Points Max Number***. The maximun number of control points. The algorithm will sample points, which are called control points, at a certain step on the edges. Increasing the number of control points can improve the robustness of the algorithm, but the calculation effort will also increase. Reducing the number of control points will do the opposite. The default value is 2500.
 - ***Pose Smooth Factor***. The factor to smooth the pose. To reduce jitter, the algorithm can smooth the output pose. A value of 0 means no smoothing is performed. The larger the value, the smoother the pose, but also the greater the delay. The default value is 0.5.
 
-#### 6. Project settings
+#### 7. Project settings
 - Enable "Allow ‘unsafe’ Code"
 - Set "Architecture" to "ARM 64-bit"
 - Confirm "Open XR" and "Microsoft Hololens feature group" are checked in "XR Plug-in Management"
@@ -222,8 +240,12 @@
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/add%20shaders.png" width = "800" alt="add shaders" />
 </div>
 
-#### 7. Program interaction
-&emsp;&emsp;When the Camereon tracker starts running (through API or "*Auto Start*" is checked in the script), the CAD model of the target with initial pose, which was set in "4. Import CAD model", will display in front of the user's eyes. The user just need to move his head so that the model is roughly aligned with the real target object, then the initialization will be completed (with some delays) and tracking begins. Successful initialization is manifested by the red model disappearing or turning green, depending on whether "*Display Model*" is checked in the script settings.
+#### 8. Program interaction
+&emsp;&emsp;When the Camereon tracker starts running (through API or "*Auto Start*" is checked in the script), 
+- **For Non-AI mode** : the CAD model of the target with initial pose, which was set in "4. Import CAD model", will display in front of the user's eyes.The user just need to move his head so that the model is roughly aligned with the real target object, then the initialization will be completed (with some delays) and tracking begins. 
+- **For AI mode** : Manual initial pose setup is no longer required — AI will automatically detect objects and completes initialization from arbitrary viewpoints (The object must remain within the PV camera’s field of view). **It is important to note that inference on the Hololens requires 3-4 seconds per pass (potentially constrained by computing resources; using DirectML could even lead to GPU suspension). Consequently, it is advisable to keep the target object relatively still with respect to the Hololens during the initialization phase.**
+
+&emsp;&emsp;Successful initialization is manifested by the red model disappearing or turning green, depending on whether "*Display Model*" is checked in the script settings.
 <br/>
 
 ### Public APIs
