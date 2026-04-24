@@ -301,6 +301,7 @@
 - Enable "Allow ‘unsafe’ Code"
 - Set "Target Architecture" to "ARM64"
 - Set "Graphics API" to "Vulkan"
+- Open AndroidManifest.xml and add : <uses-permission android:name="horizonos.permission.HEADSET_CAMERA" />
 
 #### 8. Program interaction
 &emsp;&emsp;When the Camereon tracker starts running (through API or "*Auto Start*" is checked in the script), 

@@ -302,6 +302,7 @@
 - 需勾选 “Allow ‘unsafe’ Code”
 - “Target Architecture” 选择 “ARM64”
 - Android 平台的 “Graphics API” 需选择 Vulkan
+- AndroidManifest.xml 中需添加 <uses-permission android:name="horizonos.permission.HEADSET_CAMERA" />
 
 #### 8. 程序交互
 &emsp;&emsp;程序在设备上启动后，当本项目算法开始工作时（通过API控制或者在上文脚本设置中勾选了 “*Auto Start*” ），
