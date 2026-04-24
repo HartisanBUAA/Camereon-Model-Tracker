@@ -125,7 +125,7 @@
 &emsp;&emsp;If the model has been pre-trained, import the pre-training data file (.dat) to the folder *Assets/StreamingAssets*. 
 
 #### 6. Object settings
-&emsp;&emsp;The prefab *CMRModelTracker* should load the script *CMRModelTrackerManager*, which is in the *Scripts* folder. Connect the objects in the scene to the variables in the script  as shown in the figure, where *VLCar* is the CAD model as an example.
+&emsp;&emsp;The prefab *CMRModelTracker* should load the script *CMRModelTrackerManager*, which is in the *cmrModelTracker/Scripts* folder. Connect the objects in the scene to the variables in the script  as shown in the figure, where *VLCar* is the CAD model as an example.
 
 &emsp;&emsp;If the pre-trained data has been imported and AI-enhanced mode needs to be activated, connect the .dat file to the field *Training Data File*. (Optional)
 
@@ -200,7 +200,7 @@
 &emsp;&emsp;If the model has been pre-trained, import the pre-training data file (.dat) to the folder *Assets/StreamingAssets*. 
 
 #### 6. Object settings
-&emsp;&emsp;The prefab *CMRModelTracker* should load the script *CMRModelTrackerManager*, which is in the *Scripts* folder. Connect the objects in the scene to the variables in the script  as shown in the figure, where *VLCar* is the CAD model as an example.
+&emsp;&emsp;The prefab *CMRModelTracker* should load the script *CMRModelTrackerManager*, which is in the *cmrModelTracker/Scripts* folder. Connect the objects in the scene to the variables in the script  as shown in the figure, where *VLCar* is the CAD model as an example.
 
 &emsp;&emsp;If the pre-trained data has been imported and AI-enhanced mode needs to be activated, connect the .dat file to the field *Training Data File*. (Optional)
 
@@ -266,7 +266,7 @@
 &emsp;&emsp;If the model has been pre-trained, import the pre-training data file (.dat) to the folder *Assets/StreamingAssets*. 
 
 #### 6. Object settings
-&emsp;&emsp;The prefab *CMRModelTracker* should load the script *CMRModelTrackerManager*, which is in the *Scripts* folder. Connect the objects in the scene to the variables in the script  as shown in the figure, where *VLCar* is the CAD model as an example.
+&emsp;&emsp;The prefab *CMRModelTracker* should load the script *CMRModelTrackerManager* and *PassthroughCameraAccess*. *CMRModelTrackerManager* is in the *cmrModelTracker/Scripts* folder, and *PassthroughCameraAccess* is provided by MRUK. Connect the objects in the scene to the variables in the script  as shown in the figure below, where *VLCar* is the CAD model as an example.
 
 &emsp;&emsp;If the pre-trained data has been imported and AI-enhanced mode needs to be activated, connect the .dat file to the field *Training Data File*. (Optional)
 

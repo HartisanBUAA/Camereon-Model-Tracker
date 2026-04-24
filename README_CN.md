@@ -121,12 +121,12 @@
 &emsp;&emsp;（AI模式可跳过此步）将 CAD 模型再放入 *Assets/* 一份并拖入场景中，置于 *CMR Camera* 下作为其子节点。然后通过 *Transform* 组件调整模型相对于 *CMR Camera* 的位姿，该位姿将被作为物体相对于相机的初始视角用于手动初始化，用户应根据应用场景选择合适的初始视角。
 
 #### 5. 导入预训练数据（可选）
-&emsp;&emsp;若已经对模型进行了预训练，将预训练数据（.dat文件）放入 *Assets/StreamingAssets* 中，以保证数据文件被无损打包至程序中。
+&emsp;&emsp;若已经对模型进行了预训练，将预训练数据（.dat 文件）放入 *Assets/StreamingAssets* 中，以保证数据文件被无损打包至程序中。
 
 #### 6. 对象设置
-&emsp;&emsp;预制体 *CMRModelTracker* 应挂载 *Scripts* 文件夹中的 *CMRModelTrackerManager* 脚本，并将脚本中的变量与场景中的对象连接，如下图所示。其中 *VLCar* 是作为示例而导入的 CAD 模型。
+&emsp;&emsp;预制体 *CMRModelTracker* 应挂载 *cmrModelTracker/Scripts* 文件夹中的 *CMRModelTrackerManager* 脚本，并将脚本中的变量与场景中的对象连接，如下图所示。其中 *VLCar* 是作为示例而导入的 CAD 模型。
 
-&emsp;&emsp;若已导入预训练数据并要启用 AI 模式，则将dat文件与脚本的 *Training Data File* 连线（非必须）。
+&emsp;&emsp;若已导入预训练数据并要启用 AI 模式，则将 .dat 文件与脚本的 *Training Data File* 连线（非必须）。
 
 &emsp;&emsp;若需要使用纹理边缘，则将材质、纹理贴图等文件与脚本的 *Model Attatched Files* 连线（非必须）。
 <div align="center">
@@ -137,13 +137,13 @@
 - ***Auto Start***. 程序启动后自动进入跟踪状态，开始初始化流程
 - ***Display Edges***. 初始化成功后，跟踪过程中是否继续显示边缘特征
 - ***Initialization Only***. 只执行初始化流程，初始化成功后即停止跟踪，后续位姿依靠 SLAM 维护
-- ***Static Target***. 如果已知目标物体是静止的，勾选此选项可以融合SLAM提升位姿稳定性。与 ***Initialization Only*** 的区别在于，该模式仍然会每一帧都进行跟踪。
+- ***Static Target***. 如果已知目标物体是静止的，勾选此选项可以融合SLAM提升位姿稳定性。与 ***Initialization Only*** 的区别在于，该模式仍然会每一帧都进行跟踪
 - ***Use FPS60***. 是否启用 60 帧率。高帧率可以获得更流畅的体验以及跟踪性能，但也会增加功耗，并且不是所有设备都支持60帧率
-- ***Use Color Image***. 默认使用灰度图进行跟踪，勾选此选项则使用RGB彩色图，适用于灰度图中物体颜色区分度不高的情形。开启后可以提升跟踪质量，但也会增加计算量。
+- ***Use Color Image***. 默认使用灰度图进行跟踪，勾选此选项则使用 RGB 彩色图，适用于灰度图中物体颜色区分度不高的情形。开启后可以提升跟踪质量，但也会增加计算量
 - ***Use Texture Edges***. 除了几何边缘特征，还使用物体表面纹理中的边缘特征，需要提供与实物一致的纹理贴图并确保正确渲染
-- ***Use CPU For AI Inference***. 在AI功能中使用CPU进行推理，否则将根据平台自动选择不同的加速框架进行推理。具体地，Windows：DirectML，iOS：CoreML，Android：XNNPACK。**需要注意的是，由于不同设备和平台的优化特点不同，加速框架+量化模型的组合并不总是推理最快的，需要自行尝试不同组合**。例如，iOS 设备上 CoreML+FP32 的组合最快，但部分 Android 设备上 CPU+INT8 的组合最快
+- ***Use CPU For AI Inference***. 在AI功能中使用 CPU 进行推理，否则将根据平台自动选择不同的加速框架进行推理。具体地，Windows：DirectML，iOS：CoreML，Android：XNNPACK。**需要注意的是，由于不同设备和平台的优化特点不同，加速框架+量化模型的组合并不总是推理最快的，需要自行尝试不同组合**。例如，iOS 设备上 CoreML+FP32 的组合最快，但部分 Android 设备上 CPU+INT8 的组合最快
 - ***Edge Gradient Thresh***. 在图像中检测边缘特征时的阈值，用来表示边缘两侧的差异。阈值过大可能导致边缘漏检，阈值过小可能引入噪声干扰，需根据实际应用场景进行调整，默认值为 40
-- ***Initialization Quality Thresh***. 初始化质量阈值，反映了初始化时模型边缘与目标物体的吻合程度。在某些情况下，模型边缘与目标物体并没有完全吻合，例如物体被局部遮挡、CAD模型不准确等。阈值过大可能导致初始化困难，阈值过小可能导致跟踪到错误的物体，需根据实际应用场景进行调整。默认值为 0.7
+- ***Initialization Quality Thresh***. 初始化质量阈值，反映了初始化时模型边缘与目标物体的吻合程度。在某些情况下，模型边缘与目标物体并没有完全吻合，例如物体被局部遮挡、CAD 模型不准确等。阈值过大可能导致初始化困难，阈值过小可能导致跟踪到错误的物体，需根据实际应用场景进行调整。默认值为 0.7
 - ***Tracking Quality Thresh***. 跟踪质量阈值，反映了跟踪时模型边缘与目标物体的吻合程度。由于跟踪过程中可能产生运动模糊、局部遮挡导致跟踪质量下降，该阈值应比初始化阈值稍低。默认值为 0.55 或 0.6
 - ***Control Points Max Number***. 控制点最大数量。算法会在边缘上按照一定步长采样单点（被称为控制点）进行匹配，增加控制点可提高算法鲁棒性，但计算量也会增加，减少控制点反之，默认值为 3000
 - ***Pose Smooth Factor***. 位姿平滑系数。为减少抖动，算法可对输出位姿进行一定程度的平滑。数值为 0.0 代表不进行平滑，数值越大代表平滑程度越大，但相应地也会导致位姿滞后。默认值为 0.2
@@ -181,7 +181,7 @@
 </div>
 
 #### 2. 导入本项目包
-&emsp;&emsp;向Unity中导入 *Camereon.ModelTracker.MRTK2-vX.X.X.unitypackage* ,该package包含2个文件夹（ *Plugins、Scripts* ）以及1个预制体 *CMRModelTracker* 。
+&emsp;&emsp;向Unity中导入 *Camereon.ModelTracker.MRTK2-vX.X.X.unitypackage* ,该 package 包含2个文件夹（ *Plugins、Scripts* ）以及1个预制体 *CMRModelTracker* 。
 
 #### 3. 导入本项目对象
 &emsp;&emsp;将预制体 *CMRModelTracker* 拖入场景中，该预制体包含以下对象：
@@ -197,10 +197,10 @@
 &emsp;&emsp;将 CAD 模型再放入 *Assets/* 一份并拖入场景中，置于 *CMR Camera* 下作为其子节点。若没有对模型进行预训练，则需要通过 *Transform* 组件调整模型相对于 *CMR Camera* 的位姿，该位姿将被作为物体相对于人眼（而非额头上的PV摄像头）的初始视角用于手动初始化，用户应根据应用场景选择合适的初始视角。若已经对模型进行了预训练，则无需设置初始位姿。
 
 #### 5. 导入预训练数据（可选）
-&emsp;&emsp;若已经对模型进行了预训练，将预训练数据（.dat文件）放入 *Assets/StreamingAssets* 中，以保证数据文件被无损打包至程序中。
+&emsp;&emsp;若已经对模型进行了预训练，将预训练数据（.dat 文件）放入 *Assets/StreamingAssets* 中，以保证数据文件被无损打包至程序中。
 
 #### 6. 对象设置
-&emsp;&emsp;预制体 *CMRModelTracker* 应挂载 *Scripts* 文件夹中的 *CMRModelTrackerManager* 脚本，并将脚本中的变量与场景中的对象连接，如下图所示。其中 *VLCar* 是作为示例而导入的 CAD 模型。
+&emsp;&emsp;预制体 *CMRModelTracker* 应挂载 *cmrModelTracker/Scripts* 文件夹中的 *CMRModelTrackerManager* 脚本，并将脚本中的变量与场景中的对象连接，如下图所示。其中 *VLCar* 是作为示例而导入的 CAD 模型。
 
 &emsp;&emsp;若已导入预训练数据并要启用 AI 模式，则将 .dat 文件与脚本的 *Training Data File* 连线（非必须）。
 
@@ -211,12 +211,12 @@
 
 &emsp;&emsp;*CMRModelTrackerManager* 脚本中提供了若干设置选项，主要包括：
 - ***Auto Start***. 程序启动后自动进入跟踪状态，开始初始化流程
-- ***Display Model***. 初始化成功后，跟踪过程中是否继续显示CAD模型
+- ***Display Model***. 初始化成功后，跟踪过程中是否继续显示 CAD 模型
 - ***Initialization Only***. 只执行初始化流程，初始化成功后即停止跟踪，后续位姿依靠 SLAM 维护
-- ***Use Color Image***. 默认使用灰度图进行跟踪，勾选此选项则使用RGB彩色图，适用于灰度图中物体颜色区分度不高的情形。开启后可以提升跟踪质量，但也会增加计算量。
+- ***Use Color Image***. 默认使用灰度图进行跟踪，勾选此选项则使用 RGB 彩色图，适用于灰度图中物体颜色区分度不高的情形。开启后可以提升跟踪质量，但也会增加计算量
 - ***Use Texture Edges***. 除了几何边缘特征，还使用物体表面纹理中的边缘特征，需要提供与实物一致的纹理贴图并确保正确渲染
 - ***Edge Gradient Thresh***. 在图像中检测边缘特征时的阈值，用来表示边缘两侧的像素差异。阈值过大可能导致边缘漏检，阈值过小可能引入噪声干扰，需根据实际应用场景进行调整，默认值为 40
-- ***Initialization Quality Thresh***. 初始化质量阈值，反映了初始化时模型边缘与目标物体的吻合程度。在某些情况下，模型边缘与目标物体并没有完全吻合，例如物体被局部遮挡、CAD模型不准确等。阈值过大可能导致初始化困难，阈值过小可能导致跟踪到错误的物体，需根据实际应用场景进行调整。默认值为 0.7
+- ***Initialization Quality Thresh***. 初始化质量阈值，反映了初始化时模型边缘与目标物体的吻合程度。在某些情况下，模型边缘与目标物体并没有完全吻合，例如物体被局部遮挡、CAD 模型不准确等。阈值过大可能导致初始化困难，阈值过小可能导致跟踪到错误的物体，需根据实际应用场景进行调整。默认值为 0.7
 - ***Tracking Quality Thresh***. 跟踪质量阈值，反映了跟踪时模型边缘与目标物体的吻合程度。由于跟踪过程中可能产生运动模糊、局部遮挡导致跟踪质量下降，该阈值应比初始化阈值稍低。默认值为 0.55 或 0.6
 - ***Control Points Max Number***. 控制点最大数量。算法会在边缘上按照一定步长采样单点（被称为控制点）进行匹配，增加控制点可提高算法鲁棒性，但计算量也会增加，减少控制点反之，默认值为 3000
 - ***Pose Smooth Factor***. 位姿平滑系数。为减少抖动，算法可对输出位姿进行一定程度的平滑。数值为 0.0 代表不进行平滑，数值越大代表平滑程度越大，但相应地也会导致位姿滞后。默认值为 0.2
@@ -263,10 +263,10 @@
 &emsp;&emsp;将 CAD 模型再放入 *Assets/* 一份并拖入场景中，置于 *CMR Camera* 下作为其子节点。若没有对模型进行预训练，则需要通过 *Transform* 组件调整模型相对于 *CMR Camera* 的位姿，该位姿将被作为物体相对于人眼（而非左/右摄像头）的初始视角用于手动初始化，用户应根据应用场景选择合适的初始视角。若已经对模型进行了预训练，则无需设置初始位姿。
 
 #### 5. 导入预训练数据（可选）
-&emsp;&emsp;若已经对模型进行了预训练，将预训练数据（.dat文件）放入 *Assets/StreamingAssets* 中，以保证数据文件被无损打包至程序中。
+&emsp;&emsp;若已经对模型进行了预训练，将预训练数据（.dat 文件）放入 *Assets/StreamingAssets* 中，以保证数据文件被无损打包至程序中。
 
 #### 6. 对象设置
-&emsp;&emsp;预制体 *CMRModelTracker* 应挂载 *CMRModelTrackerManager* 以及 *PassthroughCameraAccess* 脚本，前者在 *cmrModelTracker/Scripts* 中，后者由 MRUK 提供。将脚本中的变量与场景中的对象连接，如下图所示。其中 *VLCar* 是作为示例而导入的CAD模型。
+&emsp;&emsp;预制体 *CMRModelTracker* 应挂载 *CMRModelTrackerManager* 以及 *PassthroughCameraAccess* 脚本，前者在 *cmrModelTracker/Scripts* 中，后者由 MRUK 提供。将脚本中的变量与场景中的对象连接，如下图所示。其中 *VLCar* 是作为示例而导入的 CAD 模型。
 
 &emsp;&emsp;若已导入预训练数据并要启用 AI 模式，则将 .dat 文件与脚本的 *Training Data File* 连线（非必须）。
 
@@ -280,10 +280,10 @@
 - ***Display Model***. 初始化成功后，跟踪过程中是否继续显示 CAD 模型
 - ***Initialization Only***. 只执行初始化流程，初始化成功后即停止跟踪，后续位姿依靠 SLAM 维护
 - ***Use Texture Edges***. 除了几何边缘特征，还使用物体表面纹理中的边缘特征，需要提供与实物一致的纹理贴图并确保正确渲染
-- ***Use Color Image***. 默认使用灰度图进行跟踪，勾选此选项则使用RGB彩色图，适用于灰度图中物体颜色区分度不高的情形。开启后可以提升跟踪质量，但也会增加计算量
-- ***Use CPU For AI Inference***. 在AI功能中使用 CPU 进行推理，否则使用 XNNPACK 框架进行推理。**需要注意的是，由于不同设备和平台的优化特点不同，加速框架+量化模型的组合并不总是推理最快的，需要自行尝试不同组合**。
+- ***Use Color Image***. 默认使用灰度图进行跟踪，勾选此选项则使用 RGB 彩色图，适用于灰度图中物体颜色区分度不高的情形。开启后可以提升跟踪质量，但也会增加计算量
+- ***Use CPU For AI Inference***. 在AI功能中使用 CPU 进行推理，否则使用 XNNPACK 框架进行推理。**需要注意的是，由于不同设备和平台的优化特点不同，加速框架+量化模型的组合并不总是推理最快的，需要自行尝试不同组合**
 - ***Edge Gradient Thresh***. 在图像中检测边缘特征时的阈值，用来表示边缘两侧的像素差异。阈值过大可能导致边缘漏检，阈值过小可能引入噪声干扰，需根据实际应用场景进行调整，默认值为 40
-- ***Initialization Quality Thresh***. 初始化质量阈值，反映了初始化时模型边缘与目标物体的吻合程度。在某些情况下，模型边缘与目标物体并没有完全吻合，例如物体被局部遮挡、CAD模型不准确等。阈值过大可能导致初始化困难，阈值过小可能导致跟踪到错误的物体，需根据实际应用场景进行调整。默认值为 0.7
+- ***Initialization Quality Thresh***. 初始化质量阈值，反映了初始化时模型边缘与目标物体的吻合程度。在某些情况下，模型边缘与目标物体并没有完全吻合，例如物体被局部遮挡、CAD 模型不准确等。阈值过大可能导致初始化困难，阈值过小可能导致跟踪到错误的物体，需根据实际应用场景进行调整。默认值为 0.7
 - ***Tracking Quality Thresh***. 跟踪质量阈值，反映了跟踪时模型边缘与目标物体的吻合程度。由于跟踪过程中可能产生运动模糊、局部遮挡导致跟踪质量下降，该阈值应比初始化阈值稍低。默认值为 0.55 或 0.6
 - ***Control Points Max Number***. 控制点最大数量。算法会在边缘上按照一定步长采样单点（被称为控制点）进行匹配，增加控制点可提高算法鲁棒性，但计算量也会增加，减少控制点反之，默认值为 3000
 - ***Pose Smooth Factor***. 位姿平滑系数。为减少抖动，算法可对输出位姿进行一定程度的平滑。数值为 0.0 代表不进行平滑，数值越大代表平滑程度越大，但相应地也会导致位姿滞后。默认值为 0.2
@@ -312,7 +312,7 @@
 <br/>
 
 ### 公共API
-&emsp;&emsp;为方便用户对程序逻辑进行控制，*CMRModelTrackerManager* 脚本初步提供了少量 API ，同时适用于 ARFoundation 版、 MRTK 版以及 META 版：
+&emsp;&emsp;为方便用户对程序逻辑进行控制，*CMRModelTrackerManager* 脚本初步提供了少量 API ，同时适用于 ARFoundation 版、 MRTK 版以及 Meta 版：
 - `public void StartCMR()`：开启 Model Tracker，进入初始化流程
 - `public void StopCMR()`：停止跟踪
 - `public void ResumeCMR()`：重置跟踪，常用于跟踪失败或跟踪到错误目标的情形
