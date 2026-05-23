@@ -57,7 +57,7 @@
 ### Implementation
 &emsp;&emsp;The author implemented the algorithm kernel using C++. Meanwhile, in order to make it easier to use, the author has also developed a Unity plugin based on the kernel. There are three versions of this plugin:  ARFoundation version (iOS/Android), MRTK version (Microsoft Hololens 2), and Meta version (Quest 3/3s). Most features can also work based on the video stream from the native camera directly without relying on the ARFoundation, but ARFoundation can bring two benefits: 1. Fusion with SLAM can improve the stability of the pose and the ability of self-recovery; 2. ARFoundation provides camera intrinsics in real time without requiring the user to pre-calibrate the camera (especially those with Auto Focus).  
 
-&emsp;&emsp;The plugin is currently a lab prototype version and has not been fully tested, there may be adaptation bugs on some devices. During the trial period, the device should be connected to internet and the algorithm kernel runs for 3 minutes from the time the program starts, and stops automatically after the timeout.
+&emsp;&emsp;The plugin is currently a lab prototype version and has not been fully tested, there may be adaptation bugs on some devices. If you need a trial, please contact us to obtain a Trial License.
 <br/>
 
 
@@ -115,16 +115,19 @@
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20tracker%20-%20arf.png" width = "300" alt="import tracker - arf" />
 </div>
+
+#### 4. Import license file
+&emsp;&emsp;Place the license file, which is issued by us, into the *Assets/StreamingAssets* folder (create if it does not exist).
  
-#### 4. Import CAD model
+#### 5. Import CAD model
 &emsp;&emsp;Place the CAD model of the target object into the *Assets/StreamingAssets* folder (create if it does not exist). If you need to use texture edges, include the associated materials and texture maps along with the model.
 
 &emsp;&emsp;(Skip this step for AI mode) Place a copy of the CAD model into the *Assets/* folder and drag it into the scene as a child node of the *CMR Camera*. Then, use the Transform component to adjust the model's pose relative to the *CMR Camera*. This pose will serve as the initial viewpoint of the object relative to the camera for manual initialization. Users should select an appropriate initial viewpoint based on the specific application scenario.
 
-#### 5. Import pre-training data (Optional)
+#### 6. Import pre-training data (Optional)
 &emsp;&emsp;If the model has been pre-trained, import the pre-training data file (.dat) to the folder *Assets/StreamingAssets*. 
 
-#### 6. Object settings
+#### 7. Object settings
 &emsp;&emsp;The prefab *CMRModelTracker* should load the script *CMRModelTrackerManager*, which is in the *cmrModelTracker/Scripts* folder. Connect the objects in the scene to the variables in the script  as shown in the figure, where *VLCar* is the CAD model as an example.
 
 &emsp;&emsp;If the pre-trained data has been imported and AI-enhanced mode needs to be activated, connect the .dat file to the field *Training Data File*. (Optional)
@@ -153,7 +156,7 @@
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/edge%20gap%20-%20eng.png" width = "700" alt="edge gap - eng" />
 </div>
 
-#### 7. Project settings
+#### 8. Project settings
 - Enable "Allow ‘unsafe’ Code"
 - Set "Scripting Backend" to "IL2CPP"
 - For Android, set "Graphics API" to "OpenGLES3", not "Vulkan" (UPDATE : Vulkan has been supported in latest ARFoundation.)
@@ -161,7 +164,7 @@
 - For iOS, enable "Requires ARKit Support"
 - Confirm "Apple ARKit" or "Google ARCore" is checked in "XR Plug-in Management"
 
-#### 8. Program interaction
+#### 9. Program interaction
 &emsp;&emsp;When the program starts running on the device, the camera is automatically turned on by ARFoundation and the video stream is displayed on the screen. When the Camereon tracker starts running (through API or "*Auto Start*" is checked in the script), 
 - **For Non-AI mode** : the edge features of the target with the initial pose, which was setup in "4. Import CAD model", will display on the screen. The user just need to move the device so that the edges are roughly aligned with the target object in the image, then the initialization will be completed and tracking begins. 
 - **For AI mode** : Manual initial pose setup is no longer required — AI will automatically detect objects and completes initialization from arbitrary viewpoints.
@@ -191,15 +194,18 @@
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20tracker%20-%20mrtk.png" width = "300" alt="import tracker - mrtk" />
 </div>
 
-#### 4. Import CAD model
+#### 4. Import license file
+&emsp;&emsp;Place the license file, which is issued by us, into the *Assets/StreamingAssets* folder (create if it does not exist).
+
+#### 5. Import CAD model
 &emsp;&emsp;Place the CAD model of the target object into the *Assets/StreamingAssets* folder (create if it does not exist). If you need to use texture edges, include the associated materials and texture maps along with the model.
 
 &emsp;&emsp;Place a copy of the CAD model into the *Assets/* folder and drag it into the scene as a child node of the *CMR Camera*. Then, use the Transform component to adjust the model's pose relative to the *CMR Camera*. This pose will serve as the initial viewpoint of the object relative to the eyes (not the PV camera) for manual initialization. Users should select an appropriate initial viewpoint based on the specific application scenario. If the model has been pre-trained, then setting the pose is not necessary.
 
-#### 5. Import pre-training data (Optional)
+#### 6. Import pre-training data (Optional)
 &emsp;&emsp;If the model has been pre-trained, import the pre-training data file (.dat) to the folder *Assets/StreamingAssets*. 
 
-#### 6. Object settings
+#### 7. Object settings
 &emsp;&emsp;The prefab *CMRModelTracker* should load the script *CMRModelTrackerManager*, which is in the *cmrModelTracker/Scripts* folder. Connect the objects in the scene to the variables in the script  as shown in the figure, where *VLCar* is the CAD model as an example.
 
 &emsp;&emsp;If the pre-trained data has been imported and AI-enhanced mode needs to be activated, connect the .dat file to the field *Training Data File*. (Optional)
@@ -225,12 +231,12 @@
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/edge%20gap%20-%20eng.png" width = "700" alt="edge gap - eng" />
 </div>
 
-#### 7. Project settings
+#### 8. Project settings
 - Enable "Allow ‘unsafe’ Code"
 - Set "Architecture" to "ARM 64-bit"
 - Confirm "Open XR" and "Microsoft Hololens feature group" are checked in "XR Plug-in Management"
 
-#### 8. Program interaction
+#### 9. Program interaction
 &emsp;&emsp;When the Camereon tracker starts running (through API or "*Auto Start*" is checked in the script), 
 - **For Non-AI mode** : the CAD model of the target with initial pose, which was set in "4. Import CAD model", will display in front of the user's eyes.The user just need to move his head so that the model is roughly aligned with the real target object, then the initialization will be completed and tracking begins. 
 - **For AI mode** : Manual initial pose setup is no longer required — AI will automatically detect objects and completes initialization from arbitrary viewpoints (The object must remain within the PV camera’s field of view). **It is important to note that inference on the Hololens requires 3-4 seconds per pass (potentially constrained by computing resources). Consequently, it is advisable to keep the target object relatively still with respect to the Hololens during the initialization phase.**
@@ -257,15 +263,18 @@
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20tracker%20-%20meta.png" width = "300" alt="import tracker - meta" />
 </div>
 
-#### 4. Import CAD model
+#### 4. Import license file
+&emsp;&emsp;Place the license file, which is issued by us, into the *Assets/StreamingAssets* folder (create if it does not exist).
+
+#### 5. Import CAD model
 &emsp;&emsp;Place the CAD model of the target object into the *Assets/StreamingAssets* folder (create if it does not exist). If you need to use texture edges, include the associated materials and texture maps along with the model.
 
 &emsp;&emsp;Place a copy of the CAD model into the *Assets/* folder and drag it into the scene as a child node of the *CMR Camera*. Then, use the Transform component to adjust the model's pose relative to the *CMR Camera*. This pose will serve as the initial viewpoint of the object relative to the eyes (not the left/right camera) for manual initialization. Users should select an appropriate initial viewpoint based on the specific application scenario. If the model has been pre-trained, then setting the pose is not necessary.
 
-#### 5. Import pre-training data (Optional)
+#### 6. Import pre-training data (Optional)
 &emsp;&emsp;If the model has been pre-trained, import the pre-training data file (.dat) to the folder *Assets/StreamingAssets*. 
 
-#### 6. Object settings
+#### 7. Object settings
 &emsp;&emsp;The prefab *CMRModelTracker* should load the script *CMRModelTrackerManager* and *PassthroughCameraAccess*. *CMRModelTrackerManager* is in the *cmrModelTracker/Scripts* folder, and *PassthroughCameraAccess* is provided by MRUK. Connect the objects in the scene to the variables in the script  as shown in the figure below, where *VLCar* is the CAD model as an example.
 
 &emsp;&emsp;If the pre-trained data has been imported and AI-enhanced mode needs to be activated, connect the .dat file to the field *Training Data File*. (Optional)
@@ -297,13 +306,13 @@
 - ***Requested Resolution***. Expected image resolution. The default value is 1280*960.
 - ***Max Framerate***. Max framerate. The default value is 60.
 
-#### 7. Project settings
+#### 8. Project settings
 - Enable "Allow ‘unsafe’ Code"
 - Set "Target Architecture" to "ARM64"
 - Set "Graphics API" to "Vulkan"
 - Open AndroidManifest.xml and add : ` <uses-permission android:name="horizonos.permission.HEADSET_CAMERA" /> `
 
-#### 8. Program interaction
+#### 9. Program interaction
 &emsp;&emsp;When the Camereon tracker starts running (through API or "*Auto Start*" is checked in the script), 
 - **For Non-AI mode** : the CAD model of the target with initial pose, which was set in "4. Import CAD model", will display in front of the user's eyes.The user just need to move his head so that the model is roughly aligned with the real target object, then the initialization will be completed and tracking begins. 
 - **For AI mode** : Manual initial pose setup is no longer required — AI will automatically detect objects and completes initialization from arbitrary viewpoints (The object must remain within the left camera’s field of view). 

@@ -56,7 +56,7 @@
 
 ### 项目形式
 &emsp;&emsp;作者采用C++编写了算法内核。同时为了便于使用，又基于该内核开发了Unity插件，分为 ARFoundation 版（iOS / Android）、MRTK 版（Microsoft Hololens 2）、以及 Meta 版（Quest 3/3S）。直接基于原生相机的视频流而不依赖 ARFoundation 也可以实现大部分功能，但 ARFoundation 可以带来两个益处：**1. 与SLAM融合，提高位姿稳定性和自恢复能力；2. 实时提供相机内参，无需要求用户预先标定相机（尤其在自动对焦功能可能引起内参变化时）**。考虑到 ARFoundation 对后续设备的支持覆盖越来越广，作者暂时选择基于该框架进行了插件开发。  
-&emsp;&emsp;当前插件为实验室原型版本，尚未经过大面积测试，在某些设备上可能会出现适配bug，欢迎反馈。在试用期间设备需联网，算法内核自程序启动之时起运行3分钟，超时后自动停止。
+&emsp;&emsp;当前插件为实验室原型版本，尚未经过大面积测试，在某些设备上可能会出现适配bug，欢迎反馈。如需试用，请联系我们获取Trial License。
 <br/>
 
 
@@ -67,7 +67,7 @@
 - 对于 Android 设备，需支持 ARCore，具体参见官方的[设备支持清单](https://developers.google.cn/ar/devices?hl=zh-cn)。对于不在清单上的设备，也有一些 [Trick](https://www.getdroidtips.com/enable-arcore-android-smartphones/) 可以让设备支持 ARCore
 - 对于 Hololens 设备，需为第二代产品
 - 对于 Meta 设备，需为 Quest 3 或 3s，并搭载 v74 及以上系统
-- 对于 Windows、Linux、MacOS 等其它平台设备，需基于底层内核单独适配，请联系我们
+- 对于 Windows、Linux、MacOS 等其它平台设备，可基于底层内核单独适配，请联系我们
 
 ### 软件版本
 - ARFoundation 5.1.0
@@ -114,16 +114,19 @@
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20tracker%20-%20arf.png" width = "300" alt="import tracker - arf" />
 </div>
- 
-#### 4. 导入模型
+
+ #### 4. 导入License文件
+&emsp;&emsp;将我们签发的 License 文件放入 *Assets/StreamingAssets* 中（没有则自行创建）。
+
+#### 5. 导入模型
 &emsp;&emsp;将目标物体的 CAD 模型放入 *Assets/StreamingAssets* 中（没有则自行创建），如果需要使用纹理边缘就将模型附属的材质、纹理贴图等文件一并放入。
 
 &emsp;&emsp;（AI模式可跳过此步）将 CAD 模型再放入 *Assets/* 一份并拖入场景中，置于 *CMR Camera* 下作为其子节点。然后通过 *Transform* 组件调整模型相对于 *CMR Camera* 的位姿，该位姿将被作为物体相对于相机的初始视角用于手动初始化，用户应根据应用场景选择合适的初始视角。
 
-#### 5. 导入预训练数据（可选）
+#### 6. 导入预训练数据（可选）
 &emsp;&emsp;若已经对模型进行了预训练，将预训练数据（.dat 文件）放入 *Assets/StreamingAssets* 中，以保证数据文件被无损打包至程序中。
 
-#### 6. 对象设置
+#### 7. 对象设置
 &emsp;&emsp;预制体 *CMRModelTracker* 应挂载 *cmrModelTracker/Scripts* 文件夹中的 *CMRModelTrackerManager* 脚本，并将脚本中的变量与场景中的对象连接，如下图所示。其中 *VLCar* 是作为示例而导入的 CAD 模型。
 
 &emsp;&emsp;若已导入预训练数据并要启用 AI 模式，则将 .dat 文件与脚本的 *Training Data File* 连线（非必须）。
@@ -152,7 +155,7 @@
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/edge%20gap%20-%20chs.png" width = "700" alt="edge gap - chs" />
 </div>
 
-#### 7. 打包设置
+#### 8. 打包设置
 &emsp;&emsp;切换到目标平台正常进行打包即可，但 Project Settings 中个别设置需要注意：
 - 需勾选 “Allow ‘unsafe’ Code”
 - “Scripting Backend” 选择 “IL2CPP”
@@ -161,7 +164,7 @@
 - iOS 平台勾选 “Requires ARKit Support”
 - 在 “XR Plug-in Management” 中确认勾选了 “Apple ARKit” 或 “Google ARCore”
 
-#### 8. 程序交互
+#### 9. 程序交互
 &emsp;&emsp;程序在设备上开始运行时，摄像头被 ARFoundation 自动开启并将视频流显示到屏幕上。当本项目算法开始工作时（通过 API 控制或者在上文脚本设置中勾选了 “*Auto Start*” ），
 - **对于非AI模式**：目标物体在初始位姿下（在“4.导入模型”中设置的）的边缘特征会自动显示在屏幕上，用户移动设备使得边缘与图像中的目标物体大致对齐，即可完成初始化流程进入跟踪阶段，如下图所示；
 - **对于AI模式**：不再需要设置初始位姿，可在任意视角下由AI自动识别物体并完成初始化。
@@ -191,15 +194,18 @@
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20tracker%20-%20mrtk.png" width = "300" alt="import tracker - mrtk" />
 </div>
 
-#### 4. 导入模型
+ #### 4. 导入License文件
+&emsp;&emsp;将我们签发的 License 文件放入 *Assets/StreamingAssets* 中（没有则自行创建）。
+
+#### 5. 导入模型
 &emsp;&emsp;将目标物体的 CAD 模型放入 *Assets/StreamingAssets* 中（没有则自行创建），如果需要使用纹理边缘就将模型附属的材质、纹理贴图等文件一并放入。
 
 &emsp;&emsp;将 CAD 模型再放入 *Assets/* 一份并拖入场景中，置于 *CMR Camera* 下作为其子节点。若没有对模型进行预训练，则需要通过 *Transform* 组件调整模型相对于 *CMR Camera* 的位姿，该位姿将被作为物体相对于人眼（而非额头上的PV摄像头）的初始视角用于手动初始化，用户应根据应用场景选择合适的初始视角。若已经对模型进行了预训练，则无需设置初始位姿。
 
-#### 5. 导入预训练数据（可选）
+#### 6. 导入预训练数据（可选）
 &emsp;&emsp;若已经对模型进行了预训练，将预训练数据（.dat 文件）放入 *Assets/StreamingAssets* 中，以保证数据文件被无损打包至程序中。
 
-#### 6. 对象设置
+#### 7. 对象设置
 &emsp;&emsp;预制体 *CMRModelTracker* 应挂载 *cmrModelTracker/Scripts* 文件夹中的 *CMRModelTrackerManager* 脚本，并将脚本中的变量与场景中的对象连接，如下图所示。其中 *VLCar* 是作为示例而导入的 CAD 模型。
 
 &emsp;&emsp;若已导入预训练数据并要启用 AI 模式，则将 .dat 文件与脚本的 *Training Data File* 连线（非必须）。
@@ -225,13 +231,13 @@
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/edge%20gap%20-%20chs.png" width = "700" alt="edge gap - chs" />
 </div>
 
-#### 7. 打包设置
+#### 8. 打包设置
 &emsp;&emsp;切换到 UWP 平台正常进行打包即可，但 Project Settings 中个别设置需要注意：
 - 需勾选 “Allow ‘unsafe’ Code”
 - “Architecture” 选择 “ARM 64-bit”
 - 在 “XR Plug-in Management” 中确认勾选了 “Open XR” 以及 “Microsoft Hololens feature group”
 
-#### 8. 程序交互
+#### 9. 程序交互
 &emsp;&emsp;程序在设备上启动后，当本项目算法开始工作时（通过 API 控制或者在上文脚本设置中勾选了 “*Auto Start*” ），
 - **对于非AI模式**：目标物体的CAD模型将在初始位姿下（在“4.导入模型”中设置的）显示在用户眼前，用户移动头部使得模型与现实中的目标物体大致对齐，即可完成初始化流程
 - **对于AI模式**：不再需要设置初始位姿，可在任意视角下由AI自动识别物体并完成初始化（需保证物体在PV相机的视野中）。**需要注意的是，Hololens上推理一次需要3-4秒（可能对计算资源进行了限制），所以在初始化过程中尽量保持目标物体与Hololens相对静止**
@@ -257,15 +263,18 @@
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/import%20tracker%20-%20meta.png" width = "300" alt="import tracker - meta" />
 </div>
 
-#### 4. 导入模型
+ #### 4. 导入License文件
+&emsp;&emsp;将我们签发的 License 文件放入 *Assets/StreamingAssets* 中（没有则自行创建）。
+
+#### 5. 导入模型
 &emsp;&emsp;将目标物体的 CAD 模型放入 *Assets/StreamingAssets* 中（没有则自行创建），如果需要使用纹理边缘就将模型附属的材质、纹理贴图等文件一并放入。
 
 &emsp;&emsp;将 CAD 模型再放入 *Assets/* 一份并拖入场景中，置于 *CMR Camera* 下作为其子节点。若没有对模型进行预训练，则需要通过 *Transform* 组件调整模型相对于 *CMR Camera* 的位姿，该位姿将被作为物体相对于人眼（而非左/右摄像头）的初始视角用于手动初始化，用户应根据应用场景选择合适的初始视角。若已经对模型进行了预训练，则无需设置初始位姿。
 
-#### 5. 导入预训练数据（可选）
+#### 6. 导入预训练数据（可选）
 &emsp;&emsp;若已经对模型进行了预训练，将预训练数据（.dat 文件）放入 *Assets/StreamingAssets* 中，以保证数据文件被无损打包至程序中。
 
-#### 6. 对象设置
+#### 7. 对象设置
 &emsp;&emsp;预制体 *CMRModelTracker* 应挂载 *CMRModelTrackerManager* 以及 *PassthroughCameraAccess* 脚本，前者在 *cmrModelTracker/Scripts* 中，后者由 MRUK 提供。将脚本中的变量与场景中的对象连接，如下图所示。其中 *VLCar* 是作为示例而导入的 CAD 模型。
 
 &emsp;&emsp;若已导入预训练数据并要启用 AI 模式，则将 .dat 文件与脚本的 *Training Data File* 连线（非必须）。
@@ -297,14 +306,14 @@
 - ***Requested Resolution***. 期望的图像分辨率，默认值为 1280*960
 - ***Max Framerate***. 获取图像的最大帧率，默认值为 60
 
-#### 7. 打包设置
+#### 8. 打包设置
 &emsp;&emsp;切换到Android平台正常进行打包即可，但 Project Settings 中个别设置需要注意：
 - 需勾选 “Allow ‘unsafe’ Code”
 - “Target Architecture” 选择 “ARM64”
 - Android 平台的 “Graphics API” 需选择 Vulkan
 - AndroidManifest.xml 中需添加 ` <uses-permission android:name="horizonos.permission.HEADSET_CAMERA" /> `
 
-#### 8. 程序交互
+#### 9. 程序交互
 &emsp;&emsp;程序在设备上启动后，当本项目算法开始工作时（通过API控制或者在上文脚本设置中勾选了 “*Auto Start*” ），
 - **对于非AI模式**：目标物体的 CAD 模型将在初始位姿下（在“4.导入模型”中设置的）显示在用户眼前，用户移动头部使得模型与现实中的目标物体大致对齐，即可完成初始化流程
 - **对于AI模式**：不再需要设置初始位姿，可在任意视角下由AI自动识别物体并完成初始化（需保证物体在左相机的视野中）。
