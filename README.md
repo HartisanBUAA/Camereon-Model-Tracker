@@ -57,7 +57,7 @@
 ### Implementation
 &emsp;&emsp;The author implemented the algorithm kernel using C++. Meanwhile, in order to make it easier to use, the author has also developed a Unity plugin based on the kernel. There are three versions of this plugin:  ARFoundation version (iOS/Android), MRTK version (Microsoft Hololens 2), and Meta version (Quest 3/3s). Most features can also work based on the video stream from the native camera directly without relying on the ARFoundation, but ARFoundation can bring two benefits: 1. Fusion with SLAM can improve the stability of the pose and the ability of self-recovery; 2. ARFoundation provides camera intrinsics in real time without requiring the user to pre-calibrate the camera (especially those with Auto Focus).  
 
-&emsp;&emsp;The plugin is currently a lab prototype version and has not been fully tested, there may be adaptation bugs on some devices. If you need a trial, please contact us to obtain a Trial License.
+&emsp;&emsp;The plugin has not been fully tested, there may be adaptation bugs on some devices. If you need a trial, please contact us to obtain a Trial License.
 <br/>
 
 
@@ -65,7 +65,7 @@
 
 ### Device Support
 - For iOS devices, most of them in recent years with ARKit are supported.
-- For Android devices, ARCore support is required, please see the official [device support list](https://developers.google.cn/ar/devices?hl=zh-cn). For those devices that are not on the list, there are some [tricks](https://www.getdroidtips.com/enable-arcore-android-smartphones/) to support ARCore.
+- For Android devices, ARCore support is required, please see the official [device support list](https://developers.google.cn/ar/devices?hl=zh-cn). For those devices that are not on the list, you can also try installing Google Play Services for AR first.
 - For Microsoft Hololens, only the second generation is supported.
 - For Meta devices, only Quest 3 and 3s with at least v74 system are supported.
 - For devices on other platforms such as Windows, Linux, and MacOS, custom adaptation based on the underlying core is required. Please contact us.
@@ -84,12 +84,11 @@
 - Download Camereon unitypackage from the [Release](https://github.com/HartisanBUAA/Camereon-Model-Tracker/releases) page.
 
 ### Model Preparation
-- There are no special requirements for the format of the CAD model, as long as it can be imported into Unity and rendered properly.
+- Common formats of CAD models are supported such as  obj / fbx / dae / glTF / stl / ply etc..
 - If you want to utilize texture edges on the surface of the object, you need to provide a texture map that is consistent with the real object and ensure that it can be rendered correctly. Otherwise, there are no requirements for the model's texture and material.
 - The model's local coordinate system should be **right-handed**.
-- The model's unit should be "meter".
-- The origin of the local coordinate system should preferably be located near the center of the model to facilitate the adjustment of the pose and also to increase the probability of successful self-recovery.
-- **The automated AI training tool is currently under development. For CAD models pre-training requirements, please contact us.**
+- The origin of the local coordinate system should preferably be located near the center of the model to facilitate the adjustment of the pose.
+- **The local AI training tool has been completed. For CAD models pre-training requirements, please contact us.**
 <br/>
 
 
@@ -133,6 +132,8 @@
 &emsp;&emsp;If the pre-trained data has been imported and AI-enhanced mode needs to be activated, connect the .dat file to the field *Training Data File*. (Optional)
 
 &emsp;&emsp;If you want to use texture edges, connect the material and texture files to the field *Model Attatched Files*. (Optional)
+
+&emsp;&emsp;Set the CAD model’s units using *Model Mesh Unit*. They must match the units of the physical object to obtain a pose that accurately corresponds to the real world (translation values are in meters).
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/cmr%20settings%20-%20arf.png" width = "700" alt="cmr settings - arf" />
 </div>
@@ -211,6 +212,8 @@
 &emsp;&emsp;If the pre-trained data has been imported and AI-enhanced mode needs to be activated, connect the .dat file to the field *Training Data File*. (Optional)
 
 &emsp;&emsp;If you want to use texture edges, connect the material and texture files to the field *Model Attatched Files*. (Optional)
+
+&emsp;&emsp;Set the CAD model’s units using *Model Mesh Unit*. They must match the units of the physical object to obtain a pose that accurately corresponds to the real world (translation values are in meters).
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/cmr%20settings%20-%20mrtk.png" width = "700" alt="cmr settings - mrtk" />
 </div>
@@ -280,6 +283,8 @@
 &emsp;&emsp;If the pre-trained data has been imported and AI-enhanced mode needs to be activated, connect the .dat file to the field *Training Data File*. (Optional)
 
 &emsp;&emsp;If you want to use texture edges, connect the material and texture files to the field *Model Attatched Files*. (Optional)
+
+&emsp;&emsp;Set the CAD model’s units using *Model Mesh Unit*. They must match the units of the physical object to obtain a pose that accurately corresponds to the real world (translation values are in meters).
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/cmr%20settings%20-%20meta.png" width = "700" alt="cmr settings - meta" />
 </div>

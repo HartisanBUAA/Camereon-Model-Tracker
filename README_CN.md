@@ -56,7 +56,7 @@
 
 ### 项目形式
 &emsp;&emsp;作者采用C++编写了算法内核。同时为了便于使用，又基于该内核开发了Unity插件，分为 ARFoundation 版（iOS / Android）、MRTK 版（Microsoft Hololens 2）、以及 Meta 版（Quest 3/3S）。直接基于原生相机的视频流而不依赖 ARFoundation 也可以实现大部分功能，但 ARFoundation 可以带来两个益处：**1. 与SLAM融合，提高位姿稳定性和自恢复能力；2. 实时提供相机内参，无需要求用户预先标定相机（尤其在自动对焦功能可能引起内参变化时）**。考虑到 ARFoundation 对后续设备的支持覆盖越来越广，作者暂时选择基于该框架进行了插件开发。  
-&emsp;&emsp;当前插件为实验室原型版本，尚未经过大面积测试，在某些设备上可能会出现适配bug，欢迎反馈。如需试用，请联系我们获取Trial License。
+&emsp;&emsp;当前插件尚未经过大面积测试，在某些设备上可能会出现适配bug，欢迎反馈。如需试用，请联系我们获取Trial License。
 <br/>
 
 
@@ -64,7 +64,7 @@
 
 ### 设备支持
 - 对于 iOS 设备，需支持 ARKit ，近几年的 iOS 设备基本都支持
-- 对于 Android 设备，需支持 ARCore，具体参见官方的[设备支持清单](https://developers.google.cn/ar/devices?hl=zh-cn)。对于不在清单上的设备，也有一些 [Trick](https://www.getdroidtips.com/enable-arcore-android-smartphones/) 可以让设备支持 ARCore
+- 对于 Android 设备，需支持 ARCore，具体参见官方的[设备支持清单](https://developers.google.cn/ar/devices?hl=zh-cn)。对于不在清单上的设备，也可以先安装 Google Play Services for AR 试试看。
 - 对于 Hololens 设备，需为第二代产品
 - 对于 Meta 设备，需为 Quest 3 或 3s，并搭载 v74 及以上系统
 - 对于 Windows、Linux、MacOS 等其它平台设备，可基于底层内核单独适配，请联系我们
@@ -80,15 +80,14 @@
 - 对于 ARFoundation 版，通过Unity Package Manager 安装 ARFoundation，根据目标平台选择安装 ARKit XR 或者 ARCore XR 插件，[参考教程](https://www.bilibili.com/video/BV144411N7sW/?vd_source=587567287ab7e8ab9d2dfbe660b36ddf)
 - 对于 MRTK 版，通过 MixedRealityFeatureTool 安装 MRTK，[参考教程](https://learn.microsoft.com/zh-cn/windows/mixed-reality/develop/unity/welcome-to-mr-feature-tool)
 - 对于 Meta 版，通过 Unity Package Manager 安装 MRUK 开发套件，[参考教程](https://skarredghost.com/2025/03/17/how-to-camera-access-meta-quest-3-unity-6/)
-- 通过本项目的[Release](https://github.com/HartisanBUAA/Camereon-Model-Tracker/releases)页下载对应版本的 Camereon unitypackage
+- 通过本项目的 [Release](https://github.com/HartisanBUAA/Camereon-Model-Tracker/releases) 页下载对应版本的 Camereon unitypackage
 
 ### 模型准备
-- 对CAD模型的格式没有特殊要求，能导入Unity正常渲染即可
+- 常用的 CAD 模型格式都支持，例如 obj / fbx / dae / glTF / stl / ply 等
 - 如果需要利用物体表面的纹理边缘，则需要提供与实物一致的纹理贴图并确保可以正确渲染；反之，则对模型的纹理和材质没有要求
 - 要求创建模型时局部坐标系为**右手系**
-- 要求创建模型时使用“**米**”作为单位，才能得到真实位姿。例如实际物体的长度为10厘米，则其模型的长度数值应为0.1
-- 局部坐标系的原点最好位于模型中心附近，方便调整位姿，同时也可以提高自恢复的成功率
-- **自动化AI训练工具正在开发中，若需对CAD模型进行预训练请联系我们**
+- 局部坐标系的原点最好位于模型中心附近，方便调整位姿
+- **本地 AI 训练工具已开发完成，若需对 CAD 模型进行预训练请联系我们**
 <br/>
 
 
@@ -132,6 +131,8 @@
 &emsp;&emsp;若已导入预训练数据并要启用 AI 模式，则将 .dat 文件与脚本的 *Training Data File* 连线（非必须）。
 
 &emsp;&emsp;若需要使用纹理边缘，则将材质、纹理贴图等文件与脚本的 *Model Attatched Files* 连线（非必须）。
+
+&emsp;&emsp;通过 *Model Mesh Unit* 设置 CAD 模型的尺寸单位，只有与实物一致才能得到与物理世界匹配的真实位姿（位移参数以“米”为单位）。
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/cmr%20settings%20-%20arf.png" width = "700" alt="cmr settings - arf" />
 </div>
@@ -211,6 +212,8 @@
 &emsp;&emsp;若已导入预训练数据并要启用 AI 模式，则将 .dat 文件与脚本的 *Training Data File* 连线（非必须）。
 
 &emsp;&emsp;若需要使用纹理边缘，则将材质、纹理贴图等文件与脚本的 *Model Attatched Files* 连线（非必须）。
+
+&emsp;&emsp;通过 *Model Mesh Unit* 设置 CAD 模型的尺寸单位，只有与实物一致才能得到与物理世界匹配的真实位姿（位移参数以“米”为单位）。
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/cmr%20settings%20-%20mrtk.png" width = "700" alt="cmr settings - mrtk" />
 </div>
@@ -280,6 +283,8 @@
 &emsp;&emsp;若已导入预训练数据并要启用 AI 模式，则将 .dat 文件与脚本的 *Training Data File* 连线（非必须）。
 
 &emsp;&emsp;若需要使用纹理边缘，则将材质、纹理贴图等文件与脚本的 *Model Attatched Files* 连线（非必须）。
+
+&emsp;&emsp;通过 *Model Mesh Unit* 设置 CAD 模型的尺寸单位，只有与实物一致才能得到与物理世界匹配的真实位姿（位移参数以“米”为单位）。
 <div align="center">
   <img src="https://github.com/HartisanBUAA/Camereon-Model-Tracker/blob/master/Images/cmr%20settings%20-%20meta.png" width = "700" alt="cmr settings - meta" />
 </div>
